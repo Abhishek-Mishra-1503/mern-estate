@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     }
-}, {timestamps:true});     // timestamps is used to capture the time of creation of user and the time of update of the user
+}, {timestamps:true});     // timestamps is used to capture the time of creation of user and the time of update of the user. it will add these 2 details
 
 const user = mongoose.model("User", userSchema);
 

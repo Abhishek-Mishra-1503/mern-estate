@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';  // we have exported as default so we can change the name while importing
 
+import authRouter from './routes/user.auth.route.js';
+
 dotenv.config();   // initializing dotenv
 
 mongoose.connect(process.env.MONGO).then(()=>{
@@ -16,17 +18,22 @@ mongoose.connect(process.env.MONGO).then(()=>{
 // we cannot directly use a .env in the backend so we have to import the dotenv package to use it
 
 const app=express();
+
+app.use(express.json());  //by default we cannot send  json as input to the backend so this will allow to send json as input to the server
   
 app.listen(3000,()=>{
     console.log('Server is running on port 3000!')
 })
 
-
+/*
 app.get('/test',(req, res)=>{
     res.send('Hello world');
 }) 
+*/
 
 // the above will create a api route at '/test; at port 3000.
 // but if we make api routes for all the different routes than index.js become length so we create a seprate foulder for routes and import those routes 
 
-app.use("/api/user", userRouter)   // the endpoint will be 3000/api/user/test.  it will go to the userRouter can check all the routes available 
+app.use("/api/user", userRouter);   // the endpoint will be 3000/api/user/test.  it will go to the userRouter can check all the routes available 
+
+app.use("/api/auth", authRouter);
