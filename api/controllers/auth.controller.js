@@ -10,7 +10,7 @@ export const signup=async (req,res,next)=>{
 
     try{
 
-    await newUser.save()  // save the user to the db. It takes time to save so we use await and as we have used await so we have to make the function async. Using await causes the code to stay in line 7 untill its completely exexuted and then go to next line
+    await newUser.save()  // save the user to the db. It takes time to save so we use await and as we have used await so we have to make the function async. Using await causes the code to stay in line 13 untill its completely exexuted and then go to next line
 
     res.status(201).json("User created succesfully");
     }
