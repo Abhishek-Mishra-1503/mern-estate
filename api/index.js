@@ -37,3 +37,21 @@ app.get('/test',(req, res)=>{
 app.use("/api/user", userRouter);   // the endpoint will be 3000/api/user/test.  it will go to the userRouter can check all the routes available 
 
 app.use("/api/auth", authRouter);
+
+// we below created a middleware that will handle all the error. As we will create multiple api routes so we will have to do error handling in all of them manually i.e. pass the message and status code for the error in the catch block. so to avoide it we create a middleware that will provide all this i.e. handle the error and give the info to the catch
+
+// next is uded to go to the next middleware
+
+app.use((err, req, res, next) => {
+
+    const statusCode=err.statusCode || 500;  // store either the status code of the error that occured or store 500 as status code if we dont get any status code(500 is for internal server error). err.statusCode return the status code of the error stored in err
+
+    const message = err.message || "Internal Server Error";
+
+    // below we dont write statusCode:statusCode because if key and value name is same than we can write either and it will work. Same for message
+    return res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message,
+});
+});

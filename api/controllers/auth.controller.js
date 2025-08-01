@@ -1,7 +1,7 @@
 import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 
-export const signup=async (req,res)=>{
+export const signup=async (req,res,next)=>{
     const{username,email,password}=req.body;
 
     const hashedPassword = bcryptjs.hashSync(password, 10);  // we dont want to send the password as it is to the backend so we encrypt it
@@ -13,11 +13,12 @@ export const signup=async (req,res)=>{
     await newUser.save()  // save the user to the db. It takes time to save so we use await and as we have used await so we have to make the function async. Using await causes the code to stay in line 7 untill its completely exexuted and then go to next line
 
     res.status(201).json("User created succesfully");
-    }catch(error){
-        res.status(500).json(error.message);
+    }
+    catch(error){
+        next(error);
     }
 
-    // we wnat that if any error occurs than it should send the error to user and not show the error in the terminal
+    //  if any error occurs than catch will handle it and program run gracefully without getting terminatd
 
 };
 
