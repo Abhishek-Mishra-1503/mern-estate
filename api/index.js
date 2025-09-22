@@ -32,7 +32,7 @@ app.get('/test',(req, res)=>{
 */
 
 // the above will create a api route at '/test; at port 3000.
-// but if we make api routes for all the different routes than index.js become length so we create a seprate foulder for routes and import those routes 
+// but if we make api routes for all the different routes than index.js become lengthy so we create a seprate folder for routes and import those routes 
 
 app.use("/api/user", userRouter);   // the endpoint will be 3000/api/user/test.  it will go to the userRouter can check all the routes available 
 
