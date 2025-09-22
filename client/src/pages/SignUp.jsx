@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 export default function SignUp() {
   const [formData, setFormData] = useState({})
   const [error, setError]=useState(null);
   const [loading, setLoading]= useState(false);
+  const navigate= useNavigate()  // initialised
 
   const handleChange=(e)=>{
     setFormData(
@@ -19,7 +20,7 @@ export default function SignUp() {
     e.preventDefault();     // this prevents the sign up page from refreshing whenever we click sign up. The data (username,email,passwd) get submitted but the page does not get refreshed.
    
     // the client runs on the port 5173 and the backend(api) runs on port 3000 so we have to give the complete address i.e. 'http://localhost:3000/api/auth/signup' . So to fix this we create a proxy server in the vite.config for /api i.e. when we get /api it is repressed with 'http://localhost:3000'
-
+    try{
     setLoading(true);    
     const res=await fetch('/api/auth/signup',{
       method:'POST',
@@ -36,8 +37,13 @@ export default function SignUp() {
       return;
     }
     setLoading(false);
-    console.log(data);
-  }
+    setError(null);
+    navigate('/sign-in')
+  }catch(error){
+      setLoading(false);
+      setError(error.message);
+    }
+  } 
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
