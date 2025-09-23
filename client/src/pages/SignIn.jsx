@@ -1,11 +1,15 @@
 import React, {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({})
-  const [error, setError]=useState(null);
-  const [loading, setLoading]= useState(false);
+  const [formData, setFormData] = useState({});
+  const {loading, error} = useSelector((state)=> state.user) // previously here we had const [error, setError]=useState(null); const [loading, setLoading]= useState(false); to get the initial state but now we use redux and get state from the global state named user defined in userSlice
+   
   const navigate=useNavigate();
+
+  const dispatch=useDispatch();
 
   const handleChange=(e)=>{
     setFormData(
@@ -19,9 +23,9 @@ export default function SignIn() {
   const handleSubmit=async (e)=>{
     e.preventDefault();     // this prevents the sign up page from refreshing whenever we click sign up. The data (username,email,passwd) get submitted but the page does not get refreshed.
    
-    // the client runs on the port 5173 and the backend(api) runs on port 3000 so we have to give the complete address i.e. 'http://localhost:3000/api/auth/signup' . So to fix this we create a proxy server in the vite.config for /api i.e. when we get /api it is repressed with 'http://localhost:3000'
+    // the client runs on the port 5173 and the backend(api) runs on port 3000 so we have to give the complete address i.e. 'http://localhost:3000/api/auth/signup' . So to fix this we create a proxy server in the vite.config for /api i.e. when we get /api it is replaced with 'http://localhost:3000'
      try{
-    setLoading(true);    
+    dispatch(signInStart());     // here  we previously had setLoading(true)
     const res=await fetch('/api/auth/signin',{
       method:'POST',
       headers:{
@@ -32,16 +36,13 @@ export default function SignIn() {
     const data = await res.json(); //converted the res to json
 
     if(data.success==false){
-      setError(data.message);
-      setLoading(false);
+      dispatch(signInFailure(data.message));       // here we are using redux. previously we were doing setError(data.message);setLoading(false); but in place of this line but not we have defined all of it in the signInFailure and dispached it here
       return;
     }
-    setLoading(false);
-    setError(null);
+    dispatch(signInSuccess(data));     // here we use redux. previously we were doing setLoading(false); setError(null);but in place of this line but not we have defined all of it in the signInSuccess and dispached it here
     navigate('/');
   }catch{
-    setLoading(false);
-    setError(error.message);
+    dispatch(signInFailure(error.message));  // previously here we had setLoading(false); setError(error.message);
   }
   }
   return (

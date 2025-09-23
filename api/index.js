@@ -40,7 +40,7 @@ app.use("/api/auth", authRouter);
 
 // we below created a middleware that will handle all the error. As we will create multiple api routes so we will have to do error handling in all of them manually i.e. pass the message and status code for the error in the catch block. so to avoide it we create a middleware that will provide all this i.e. handle the error and give the info to the catch
 
-// next is uded to go to the next middleware
+// next is used to go to the next middleware
 
 app.use((err, req, res, next) => {
 
